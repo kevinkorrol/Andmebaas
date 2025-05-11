@@ -294,6 +294,10 @@ const DELETE_CLUB = `
     WHERE k.id = $1
 `
 
+const SELECT_CLUB_TOP_PLAYERS = `
+        SELECT * FROM f_klubiparimad($1);
+`;
+
 module.exports = {
     SELECT_MATCH_BY_ID,
     getAddOrUpdateMatchQuery,
@@ -316,4 +320,5 @@ module.exports = {
     SELECT_TOP_CLUBS,
     getAddOrUpdateClubQuery,
     DELETE_CLUB,
+    SELECT_CLUB_TOP_PLAYERS,
 };

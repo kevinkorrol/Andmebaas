@@ -40,6 +40,38 @@
             @club-updated="fetchClubData"
           />
         </v-col>
+
+        <v-col cols="12" md="6">
+        <h2>TOP mängijad</h2>
+        <v-row>
+          <v-col
+            v-for="(player, index) in clubTopPlayers"
+            :key="player.name"
+            cols="10">
+            <v-card>
+              <v-card-title>
+                <v-row align="center">
+                  <v-col cols="8">
+                    <v-chip
+                      :color="rankingColor(index)"
+                      class="ma-2"
+                      label>
+                      {{ index + 1 }}
+                    </v-chip>
+                    {{ player.name }}
+                  </v-col>
+                  <v-col
+                    cols="4"
+                    class="text-right points">
+                    {{ player.points }}
+                  </v-col>
+                </v-row>
+              </v-card-title>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+
       </v-row>
 
       <v-row cols="12" md="8">
@@ -71,6 +103,7 @@ import {fetchClubById} from "@/wrapper/clubsApiWrapper.js";
 import PlayersSearchTable from "@/components/clubs/PlayersSearchTable.vue";
 import AddClubDialog from "@/components/clubs/AddClubDialog.vue";
 import ModifyClubForm from "@/components/clubs/ModifyClubForm.vue";
+import {fetchTopClubPlayers} from "@/wrapper/playersApiWrapper.js";
 
 export default {
   name: 'ClubDetailsPage',
@@ -84,6 +117,7 @@ export default {
       club: null,
       clubId: null,
       showModifyClubDialog: false,
+      clubTopPlayers: [],
     }
   },
   created() {
@@ -96,13 +130,19 @@ export default {
   },
   methods: {
     async fetchClubData() {
-      this.club = await fetchClubById(this.clubId)
+      this.club = await fetchClubById(this.clubId);
+      this.clubTopPlayers = await fetchTopClubPlayers(this.club.name);
     },
     openModifyClubDialog() {
       this.showModifyClubDialog = true;
     },
     updateShowModifyDialog(value) {
       this.showModifyClubDialog = value;
+    },
+    rankingColor(index) {
+      if (index === 0) return 'gold';
+      else if (index === 1) return 'silver';
+      else if (index === 2) return 'bronze';;
     },
   }
 

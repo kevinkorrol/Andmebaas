@@ -102,3 +102,25 @@ function formatTime(timeObj) {
   const seconds = String(timeObj.seconds).padStart(2, '0');
   return `${minutes}:${seconds}`;
 }
+
+export async function fetchTopClubPlayers(clubName) {
+  try {
+    const response = await apiClient.get(`/players/clubtop/${clubName}`);
+    return mapClubTopsData(response.data);
+  } catch (error) {
+    console.error('Error reading top players', error);
+  }
+}
+
+function mapClubTopsData(players) {
+  return players.map(player => {
+    return mapClubTopData(player)
+  })
+}
+
+function mapClubTopData(player) {
+  return {
+    name: player.isik,
+    points: parseFloat(player.punktisumma).toFixed(1)
+  }
+}
